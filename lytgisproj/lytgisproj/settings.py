@@ -36,7 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'wsgi',
     'south',
+    'lytgis',
 )
 
 MIDDLEWARE_CLASSES = (
