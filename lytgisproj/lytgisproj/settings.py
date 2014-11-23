@@ -36,7 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'wsgi',
+    'django.contrib.gis',
+    'django_extensions',
     'south',
     'lytgis',
 )
@@ -57,11 +58,18 @@ WSGI_APPLICATION = 'lytgisproj.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
+POSTGIS_VERSION = ( 2, 1 )
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'osm',                      # Or path to database file if using sqlite3.
+        # The following settings are not used with sqlite3:
+        'USER': 'berserk',
+        'PASSWORD': 't3st3r',
+        #'HOST': 'lyttiles.cloudapp.net',    
+
+        'HOST': '',                        # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '',                      # Set to empty string for default.
     }
 }
 

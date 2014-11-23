@@ -1,0 +1,61 @@
+SELECT org.org_id,
+org.org_name supplier_name,
+org.supplier_form_of_organization,
+orgbuscat.businesscategory
+FROM "ec10e1c4-4eb3-4f29-97fe-f09ea950cdf1" org 
+LEFT JOIN "58ea40bf-15e9-4c38-adef-fd93455d8c7e" orgbuscat 
+ON (org.org_id = orgbuscat.orgid)
+WHERE orgbuscat.businesscategory in ('Aviation Products',
+'Automation Equipment',
+'Construction Projects',
+'Consulting Services'
+)
+
+SELECT o.org_id, COUNT(*) ct FROM "ec10e1c4-4eb3-4f29-97fe-f09ea950cdf1" o LEFT JOIN "6427affb-e841-45b8-b0dc-ed267498724a" bl ON o.org_id=bl.org_id WHERE o.member_type='Supplier' GROUP BY o.org_id ORDER BY ct DESC LIMIT 5
+
+
+award per organization
+SELECT o.org_id, a.* FROM "ec10e1c4-4eb3-4f29-97fe-f09ea950cdf1" o LEFT JOIN "6427affb-e841-45b8-b0dc-ed267498724a" bl ON o.org_id=bl.org_id LEFT JOIN "539525df-fc9a-4adf-b33d-04747e95f120" a ON bl.award_id=a.award_id WHERE o.member_type='Supplier' AND a.budget IS NOT NULL LIMIT 100
+
+award_statuses 
+SELECT award_status, COUNT(*) FROM "539525df-fc9a-4adf-b33d-04747e95f120" GROUP BY award_status 
+
+bid_information.tender_status
+SELECT tender_status, COUNT(*) FROM "baccd784-45a2-4c0c-82a6-61694cd68c9d" GROUP BY tender_status 
+
+SELECT budget, COUNT(*) ct FROM "539525df-fc9a-4adf-b33d-04747e95f120" GROUP BY budget ORDER BY ct ASC
+
+bid information classifications
+
+SELECT classification, COUNT(*) FROM "9c74991c-a5e6-4489-8413-c20a8a181d90" GROUP BY classification 
+
+in bid_line but not in award
+SELECT bl.* FROM "6427affb-e841-45b8-b0dc-ed267498724a" bl LEFT JOIN "539525df-fc9a-4adf-b33d-04747e95f120" a ON bl.award_id=a.award_id WHERE a.award_id IS NULL
+
+highest bid count for org
+SELECT o.org_id, o.org_name, COUNT(*) ct FROM "ec10e1c4-4eb3-4f29-97fe-f09ea950cdf1" o LEFT JOIN "6427affb-e841-45b8-b0dc-ed267498724a" bl ON o.org_id=bl.org_id WHERE o.member_type='Supplier' GROUP BY o.org_id, o.org_name ORDER BY ct DESC LIMIT 100
+
+highest award count for org
+SELECT o.org_id, o.org_name, COUNT(*) ct FROM "ec10e1c4-4eb3-4f29-97fe-f09ea950cdf1" o LEFT JOIN "539525df-fc9a-4adf-b33d-04747e95f120" bl ON o.org_id=bl.awardee_id WHERE o.member_type='Supplier' GROUP BY o.org_id, o.org_name ORDER BY ct DESC LIMIT 100
+
+
+SELECT * FROM "539525df-fc9a-4adf-b33d-04747e95f120" WHERE awardee_id=22102 ORDER BY award_id ASC
+
+//build line item (3)
+SELECT * FROM "daa80cd8-da5d-4b9d-bb6d-217a360ff7c1" WHERE ref_id='788886'
+
+//awards (3)
+SELECT * FROM "539525df-fc9a-4adf-b33d-04747e95f120" WHERE ref_id='788886'
+
+//bidders list
+SELECT * FROM "6427affb-e841-45b8-b0dc-ed267498724a" WHERE award_id=110789
+
+//bid info
+SELECT bi.*, bl.blct, a.act FROM "baccd784-45a2-4c0c-82a6-61694cd68c9d" bi LEFT JOIN 
+(SELECT ref_id, COUNT(*) blct FROM "daa80cd8-da5d-4b9d-bb6d-217a360ff7c1" GROUP BY ref_id) bl ON bi.ref_id=bl.ref_id LEFT JOIN 
+(SELECT ref_id, COUNT(*) act FROM "539525df-fc9a-4adf-b33d-04747e95f120" GROUP BY ref_id) a ON bl.ref_id=a.ref_id
+WHERE bl.ct IS NOT NULL LIMIT 100
+
+SELECT * FROM "baccd784-45a2-4c0c-82a6-61694cd68c9d" WHERE ref_id='1015269'
+
+
